@@ -76,6 +76,18 @@ gcloud looker instances import mi-looker --region=us-central1 \
 
 El registro DNS se actualiza solo si cambia la IP privada.
 
+## Restaurar desde un backup nativo
+
+`restore.sh` restaura la instancia a partir de un backup de Looker que eliges de una lista. Los backups nativos solo se pueden restaurar **sobre la misma instancia** de la que se tomaron, sobrescriben el contenido actual y caducan a los 30 días. Para todo lo demás, usa el flujo de export/import de arriba.
+
+```bash
+./restore.sh -i mi-looker -r us-central1              # menú interactivo
+./restore.sh -i mi-looker -r us-central1 --list       # solo listar backups
+./restore.sh -i mi-looker -r us-central1 --latest -y  # último backup ACTIVE, sin preguntar
+```
+
+Requiere el rol `roles/looker.admin`. El script pide escribir el nombre de la instancia antes de empezar y después consulta en bucle hasta que la operación termina (`--no-wait` omite la espera).
+
 ## Acceso de usuarios
 
 La instancia no tiene IP pública, así que los usuarios entran desde dentro de la VPC: por VPN, Cloud Interconnect o una VM o proxy en la red.
